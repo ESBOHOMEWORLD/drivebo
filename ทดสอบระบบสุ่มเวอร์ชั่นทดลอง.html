@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบสุ่มคูปอง</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>ร่วมสนุกลุ้นคูปองส่วนลดจากเอสโบ้สูงสุดถึง300บาท</h1>
+    <button id="drawCoupon">สุ่มคูปอง</button>
+    <div id="result"></div>
+
+    <script>
+        // รายการคูปองพร้อมเปอร์เซ็นต์การเกิด
+        const coupons = [
+            { discount: "20บาท", probability: 40 },  // โอกาส 40%
+            { discount: "50บาท", probability: 30 },  // โอกาส 30%
+            { discount: "100บาท", probability: 20 }, // โอกาส 20%
+            { discount: "200บาท", probability: 7 },  // โอกาส 7%
+            { discount: "300บาท", probability: 3 }   // โอกาส 3%
+        ];
+
+        // ฟังก์ชันสุ่มคูปอง
+        function drawCoupon() {
+            const weightedCoupons = [];
+            coupons.forEach(coupon => {
+                for (let i = 0; i < coupon.probability; i++) {
+                    weightedCoupons.push(coupon.discount);
+                }
+            });
+
+            const randomIndex = Math.floor(Math.random() * weightedCoupons.length);
+            return weightedCoupons[randomIndex];
+        }
+
+        // จัดการเมื่อกดปุ่ม
+        document.getElementById('drawCoupon').addEventListener('click', () => {
+            if (localStorage.getItem('hasClaimedCoupon')) {
+                document.getElementById('result').textContent = "คุณสุ่มคูปองไปแล้วนะจ๊ะ!";
+            } else {
+                const coupon = drawCoupon();
+                document.getElementById('result').textContent = `ยินดีด้วย! คุณได้รับส่วนลด ${coupon}`;
+                localStorage.setItem('hasClaimedCoupon', 'true'); // บันทึกการสุ่ม
+            }
+        });
+    </script>
+</body>
+</html>
